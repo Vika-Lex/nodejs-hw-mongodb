@@ -4,9 +4,22 @@ import {
   getContactById, updateContact,
 } from '../services/contacts.js';
 import createHttpError from 'http-errors';
+import { createContactSchema } from '../validation/contacts.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export const getAllContactsController = async (req, res) => {
-  const contacts = await getAllContacts();
+  const {page,perPage} = parsePaginationParams(req.query);
+  const {sortBy, sortOrder} = parseSortParams(req.query);
+  const filter = parseFilterParams(req.query);
+  const contacts = await getAllContacts({
+    page,
+    perPage,
+    filter,
+    sortBy,
+    sortOrder
+  });
   res.status(200)
      .json({
        status: 200,
@@ -31,15 +44,19 @@ export const getContactByIdController = async (req, res) => {
      });
 };
 
-export const createContactController = async (req, res) => {
-  const contact = await createContact(req.body);
-
-  res.status(201)
-     .json({
-       status: 201,
-       message: 'Successfully created contact!',
-       data: contact,
-     });
+export const createContactController = async (req, res,next) => {
+  try {
+    const validated = await createContactSchema.validateAsync(req.body, { abortEarly: false });
+    const contact = await createContact(validated);
+    res.status(201)
+       .json({
+         status: 201,
+         message: 'Successfully created contact!',
+         data: contact,
+       });
+  } catch (validationError) {
+    next(validationError);
+  }
 };
 
 export const upsertContactController = async (req, res) => {
@@ -63,7 +80,7 @@ export const upsertContactController = async (req, res) => {
 };
 
 export const patchContactController = async (req, res) => {
-  const {contactId} = req.params;
+  const { contactId } = req.params;
 
   const result = await updateContact(contactId, req.body);
 
