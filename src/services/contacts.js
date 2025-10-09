@@ -8,11 +8,12 @@ export const getAllContacts = async ({
                                        filter = {},
                                        sortOrder = SORT_ORDER.ASC,
                                        sortBy = '_id',
+                                       userId,
                                      }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  const contactsQuery = ContactsCollection.find();
+  const contactsQuery = ContactsCollection.find({ userId });
   
   if (filter.contactType) {
     contactsQuery.where('contactType').equals(filter.contactType);
@@ -21,7 +22,7 @@ export const getAllContacts = async ({
     contactsQuery.where('isFavourite').equals(filter.isFavourite);
   }
 
-  const contactCount = await ContactsCollection.find().merge(contactsQuery).countDocuments();
+  const contactCount = await ContactsCollection.find({ userId }).merge(contactsQuery).countDocuments();
   const contacts = await contactsQuery
     .skip(skip)
     .limit(limit)
@@ -35,20 +36,21 @@ export const getAllContacts = async ({
   };
 };
 
-export const getContactById = async (id) => {
-  const contact = await ContactsCollection.findById(id);
+export const getContactById = async (id, userId) => {
+  const contact = await ContactsCollection.findOne({ _id: id, userId });
   return contact;
 };
 
-export const createContact = async (contact) => {
-  const newContact = await ContactsCollection.create(contact);
+export const createContact = async (contact, userId) => {
+  const newContact = await ContactsCollection.create({ ...contact, userId });
   return newContact;
 };
 
-export const updateContact = async (studentId, payload, options = {}) => {
+export const updateContact = async (contactId, payload, options = {}, userId) => {
+  const updateData = options.upsert ? { ...payload, userId } : payload;
   const rawResult = await ContactsCollection.findOneAndUpdate(
-    { _id: studentId },
-    payload,
+    { _id: contactId, userId },
+    updateData,
     {
       new: true,
       includeResultMetadata: true,
@@ -63,9 +65,10 @@ export const updateContact = async (studentId, payload, options = {}) => {
   };
 };
 
-export const deleteById = async (id) => {
+export const deleteById = async (id, userId) => {
   const contact = await ContactsCollection.findOneAndDelete({
     _id: id,
+    userId,
   });
   return contact;
 };
