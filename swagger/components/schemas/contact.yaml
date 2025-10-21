@@ -1,0 +1,46 @@
+type: object
+properties:
+  _id:
+    type: string
+    example: '65f3a1b2c9d4e5f6a7b8c9d0'
+  name:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: 'John Doe'
+  phoneNumber:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: '+380501234567'
+  email:
+    type: string
+    format: email
+    example: 'john@example.com'
+  isFavourite:
+    type: boolean
+    example: false
+  contactType:
+    type: string
+    enum: [personal, home, work]
+    example: 'personal'
+  photo:
+    type: string
+    example: 'http://localhost:3000/uploads/1234567890_photo.jpg'
+  userId:
+    type: string
+    example: '65f3a1b2c9d4e5f6a7b8c9d0'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2024-10-15T10:30:00.000Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2024-10-15T10:30:00.000Z'
+required:
+  - name
+  - phoneNumber
+  - email
+  - isFavourite
+  - contactType

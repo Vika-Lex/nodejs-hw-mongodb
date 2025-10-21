@@ -5,14 +5,18 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "build": "npm run build-docs",
+    "build-docs": "redocly bundle docs/openapi.yaml --ext json -o docs/swagger.json",
+    "preview-docs": "redocly preview-docs"
   },
   "keywords": [],
-  "author": "Viktoria Kolesnik <vika.notariat@ukr.net>",
+  "author": "Viktoriia Kolesnik <vika.notariat@ukr.net>",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.2.0",
     "@faker-js/faker": "^10.0.0",
+    "@redocly/cli": "^2.5.1",
     "eslint": "^9.2.0",
     "globals": "^15.1.0",
     "nodemon": "^3.1.10",
@@ -20,20 +24,15 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "google-auth-library": "^10.4.0",
-    "handlebars": "^4.7.8",
     "http-errors": "^2.0.0",
     "joi": "^18.0.1",
-    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.19.0",
     "mongoose": "^8.18.0",
-    "multer": "^2.0.2",
-    "nodemailer": "^7.0.9",
-    "pino-http": "^10.5.0"
+    "pino-http": "^10.5.0",
+    "swagger-ui-express": "^5.0.1"
   }
 }

@@ -14,7 +14,7 @@ export const getAllContacts = async ({
   const skip = (page - 1) * perPage;
 
   const contactsQuery = ContactsCollection.find({ userId });
-
+  
   if (filter.contactType) {
     contactsQuery.where('contactType').equals(filter.contactType);
   }
@@ -41,18 +41,13 @@ export const getContactById = async (id, userId) => {
   return contact;
 };
 
-export const createContact = async (contact, userId, photoUrl) => {
-  const newContact = await ContactsCollection.create({ ...contact, userId, photo: photoUrl});
+export const createContact = async (contact, userId) => {
+  const newContact = await ContactsCollection.create({ ...contact, userId });
   return newContact;
 };
 
-export const updateContact = async (contactId, payload, options = {}, userId, photoUrl) => {
+export const updateContact = async (contactId, payload, options = {}, userId) => {
   const updateData = options.upsert ? { ...payload, userId } : payload;
-
-  if (photoUrl) {
-    updateData.photo = photoUrl;
-  }
-
   const rawResult = await ContactsCollection.findOneAndUpdate(
     { _id: contactId, userId },
     updateData,

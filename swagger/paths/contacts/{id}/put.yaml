@@ -1,0 +1,84 @@
+tags:
+  - Contacts
+summary: Upsert contact
+operationId: upsertContact
+description: Update contact or create if not exists
+security:
+  - bearerAuth: []
+parameters:
+  - name: contactId
+    in: path
+    required: true
+    schema:
+      type: string
+      example: '65f3a1b2c9d4e5f6a7b8c9d0'
+    description: Contact ID
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            minLength: 3
+            maxLength: 20
+            example: 'John Doe'
+          phoneNumber:
+            type: string
+            minLength: 3
+            maxLength: 20
+            example: '+380501234567'
+          email:
+            type: string
+            format: email
+            example: 'john@example.com'
+          isFavourite:
+            type: boolean
+            example: false
+          contactType:
+            type: string
+            enum: [personal, home, work]
+            example: 'personal'
+        required:
+          - name
+          - phoneNumber
+          - email
+          - isFavourite
+          - contactType
+responses:
+  '200':
+    description: Successfully updated contact
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully upserted contact!'
+            data:
+              $ref: '../../../components/schemas/contact.yaml'
+  '201':
+    description: Successfully created contact
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Successfully upserted contact!'
+            data:
+              $ref: '../../../components/schemas/contact.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

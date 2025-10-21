@@ -1,0 +1,90 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Contacts API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: |
+    API for managing contacts with user authentication.
+
+    Features:
+    - User registration and authentication
+    - Contact management (CRUD operations)
+    - Photo upload to Cloudinary
+    - Pagination, sorting and filtering
+    - Password reset via email
+
+tags:
+  - name: Auth
+    description: Authentication endpoints
+  - name: Contacts
+    description: Contact management endpoints
+
+servers:
+  - url: https://hw2-mongodb-0wjh.onrender.com/
+    description: Production api
+
+paths:
+  /auth/register:
+    post:
+      $ref: '../swagger/paths/auth/register.yaml'
+  /auth/login:
+    post:
+      $ref: '../swagger/paths/auth/login.yaml'
+  /auth/logout:
+    post:
+      $ref: '../swagger/paths/auth/logout.yaml'
+  /auth/refresh:
+    post:
+      $ref: '../swagger/paths/auth/refresh.yaml'
+  /auth/send-reset-email:
+    post:
+      $ref: '../swagger/paths/auth/send-reset-email.yaml'
+  /auth/reset-pwd:
+    post:
+      $ref: '../swagger/paths/auth/reset-pwd.yaml'
+  /contacts:
+    get:
+      $ref: '../swagger/paths/contacts/get.yaml'
+    post:
+      $ref: '../swagger/paths/contacts/post.yaml'
+  /contacts/{contactId}:
+    get:
+      $ref: '../swagger/paths/contacts/{id}/get.yaml'
+    patch:
+      $ref: '../swagger/paths/contacts/{id}/patch.yaml'
+    put:
+      $ref: '../swagger/paths/contacts/{id}/put.yaml'
+    delete:
+      $ref: '../swagger/paths/contacts/{id}/delete.yaml'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Enter your JWT token in the format **Bearer &lt;token&gt;**
+
+  schemas:
+    Contact:
+      $ref: '../swagger/components/schemas/contact.yaml'
+    User:
+      $ref: '../swagger/components/schemas/user.yaml'
+    Error:
+      $ref: '../swagger/components/schemas/error.yaml'
+
+  responses:
+    '200':
+      $ref: '../swagger/components/responses/200.yaml'
+    '201':
+      $ref: '../swagger/components/responses/201.yaml'
+    '204':
+      $ref: '../swagger/components/responses/204.yaml'
+    '401':
+      $ref: '../swagger/components/responses/401.yaml'
+    '404':
+      $ref: '../swagger/components/responses/404.yaml'
+    '500':
+      $ref: '../swagger/components/responses/500.yaml'

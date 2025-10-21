@@ -1,0 +1,25 @@
+type: object
+properties:
+  _id:
+    type: string
+    example: '65f3a1b2c9d4e5f6a7b8c9d0'
+  name:
+    type: string
+    minLength: 3
+    maxLength: 30
+    example: 'John Doe'
+  email:
+    type: string
+    format: email
+    example: 'john@example.com'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2024-10-15T10:30:00.000Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2024-10-15T10:30:00.000Z'
+required:
+  - name
+  - email
