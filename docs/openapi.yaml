@@ -22,7 +22,7 @@ tags:
     description: Contact management endpoints
 
 servers:
-  - url: https://hw2-mongodb-0wjh.onrender.com/
+  - url: https://nodejs-hw-mongodb-2-q96b.onrender.com
     description: Production api
 
 paths:
